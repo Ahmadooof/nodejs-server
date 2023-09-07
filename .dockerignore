@@ -1,0 +1,20 @@
+# Exclude node_modules and npm-debug.log
+ipAddressService/node_modules
+npm-debug.log
+
+# Exclude any development or testing-related files
+*.log
+*.md
+*.test.js
+*.spec.js
+
+# Exclude any version control system files and directories
+.git
+.gitignore
+
+# Exclude editor-related files
+.vscode
+
+# Exclude Docker-related files (optional)
+Dockerfile
+.dockerignore
