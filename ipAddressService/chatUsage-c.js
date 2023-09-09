@@ -32,27 +32,27 @@ const incrementMessagesSent = async (visitorId) => {
 };
 
 
-const nrOfMessagesUsed = async (visitorId) => {
+const nrOfMessagesUsed = async (visitor_id) => {
     const selectQuery = `
       SELECT SUM(messages_sent) AS total_messages_sent
       FROM chat_usage
       WHERE visitor_id = ?;
     `;
     try {
-      // Execute the SQL query using the database connection
-      const [rows] = await dbConnection.execute(selectQuery, [visitorId]);
-  
-      // The query was successful, and you can access the result
-      const totalMessagesSent = rows[0].total_messages_sent;
-  
-      return totalMessagesSent;
+        // Execute the SQL query using the database connection
+        const [rows] = await dbConnection.execute(selectQuery, [visitor_id]);
+
+        // The query was successful, and you can access the result
+        const totalMessagesSent = rows[0].total_messages_sent;
+
+        return totalMessagesSent;
     } catch (error) {
-      // Handle any database errors here
-      console.error('Error retrieving total messages sent:', error);
-      throw error;
+        // Handle any database errors here
+        console.error('Error retrieving total messages sent:', error);
+        throw error;
     }
-  };
-  
+};
+
 
 const createDefaultChatUsage = async (visitorId) => {
     // Insert query to create a default record
@@ -69,18 +69,18 @@ const createDefaultChatUsage = async (visitorId) => {
 };
 
 
-chatUsageRouter.get('/get-chat-usage-by-IP', async (req, res) => {
+chatUsageRouter.get('/get-messages-sent-by-id', async (req, res) => {
     try {
-      // Retrieve the IP address from the query parameters
-      const { ip: visitorIP } = req.query;
+      // Retrieve the visitor_id from the query parameters
+      const { visitor_id } = req.query;
   
-      if (!visitorIP) {
-        // If the IP address is missing in the query parameters, return a 400 Bad Request response
-        return res.status(400).json({ error: 'IP address is missing in the query parameters' });
+      if (!visitor_id) {
+        // If the visitor_id is missing in the query parameters, return a 400 Bad Request response
+        return res.status(400).json({ error: 'VisitorID is missing in the query parameters' });
       }
   
-      // Call the chatUsage function with the retrieved IP address
-      const messagesSent = await nrOfMessagesUsed(visitorIP);
+      // Call the nrOfMessagesUsed function with the retrieved visitor_id
+      const messagesSent = await nrOfMessagesUsed(visitor_id);
   
       res.json({ messagesSent });
     } catch (error) {
@@ -88,6 +88,7 @@ chatUsageRouter.get('/get-chat-usage-by-IP', async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   });
+  
 
 chatUsageRouter.post('/increment-messages', async (req, res, next) => {
     try {
