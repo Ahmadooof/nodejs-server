@@ -1,9 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import cors from '../cors.js';
-import routes from './ipController.js'
-
+import cors from './cors.js';
+import visitorRouter from './visitor-c.js'
+import chatUsageRouter from './chatUsage-c.js'
 var app = express();
 
 app.use(bodyParser.json());
@@ -16,7 +16,9 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.use(cors);
 
-app.use('/', routes);
+app.use('/', visitorRouter);
+app.use('/', chatUsageRouter);
+
 
 // Error handling middleware Customize the error response based on the error type or status code
 app.use((err, req, res, next) => {

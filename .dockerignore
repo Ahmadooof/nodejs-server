@@ -1,5 +1,5 @@
 # Exclude node_modules and npm-debug.log
-ipAddressService/node_modules
+node_modules
 npm-debug.log
 
 # Exclude any development or testing-related files
