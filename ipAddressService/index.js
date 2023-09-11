@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import cors from './cors.js';
 import visitorRouter from './visitor-c.js'
 import chatUsageRouter from './chatUsage-c.js'
+import openAi from './openai.js';
 var app = express();
 
 app.use(bodyParser.json());
@@ -18,6 +19,8 @@ app.use(cors);
 
 app.use('/', visitorRouter);
 app.use('/', chatUsageRouter);
+app.use('/', openAi);
+
 
 
 // Error handling middleware Customize the error response based on the error type or status code

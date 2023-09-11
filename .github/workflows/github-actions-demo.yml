@@ -1,0 +1,46 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Generate Docker Image Tag (Date)
+        id: tag
+        run: echo "::set-output name=DOCKER_TAG::$(date +%Y%m%d%H%M%S)"
+
+      - name: Build and Push Docker Image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_TAG: ${{ steps.tag.outputs.DOCKER_TAG }}
+        run: |
+          docker buildx create --use
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker buildx build -t ahmadooof/mywebsite-nodejs:$DOCKER_TAG ./client --push
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save k8s-london-sharedcpu-12
+
+      - name: Update Kubernetes deployment
+        env:
+          DOCKER_TAG: ${{ steps.tag.outputs.DOCKER_TAG }}
+        run: |
+          kubectl set image deployment/nodejs-deployment nodejs-pod=ahmadooof/mywebsite-nodejs:$DOCKER_TAG
+

@@ -20,12 +20,15 @@ async function insertVisitor(visitorData) {
 }
 
 // Helper function to get a visitor by IP address
-async function getVisitorByIPAddress(ipAddress) {
+export async function getVisitorByIPAddress(ipAddress) {
+  console.log(ipAddress)
   // Define your SQL query to retrieve a visitor by IP address
   const selectQuery = 'SELECT * FROM visitors WHERE ip_address = ?';
 
   try {
     const [results] = await dbConnection.query(selectQuery, [ipAddress]);
+
+    console.log(results)
 
     // Check if a visitor with the specified IP address exists
     if (results.length > 0) {

@@ -3,7 +3,7 @@ import dbConnection from './db.js';
 
 const chatUsageRouter = express.Router();
 
-const incrementMessagesSent = async (visitorId) => {
+export const incrementMessagesSent = async (visitorId) => {
     // Check if a record for the visitor exists in chat_usage
     const checkQuery = 'SELECT id FROM chat_usage WHERE visitor_id = ?';
 
@@ -32,7 +32,7 @@ const incrementMessagesSent = async (visitorId) => {
 };
 
 
-const nrOfMessagesUsed = async (visitor_id) => {
+export const nrOfMessagesUsed = async (visitor_id) => {
     const selectQuery = `
       SELECT SUM(messages_sent) AS total_messages_sent
       FROM chat_usage
@@ -71,24 +71,41 @@ const createDefaultChatUsage = async (visitorId) => {
 
 chatUsageRouter.get('/get-messages-sent-by-id', async (req, res) => {
     try {
-      // Retrieve the visitor_id from the query parameters
-      const { visitor_id } = req.query;
-  
-      if (!visitor_id) {
-        // If the visitor_id is missing in the query parameters, return a 400 Bad Request response
-        return res.status(400).json({ error: 'VisitorID is missing in the query parameters' });
-      }
-  
-      // Call the nrOfMessagesUsed function with the retrieved visitor_id
-      const messagesSent = await nrOfMessagesUsed(visitor_id);
-  
-      res.json({ messagesSent });
+        // Retrieve the visitor_id from the query parameters
+        const { visitor_id } = req.query;
+
+        if (!visitor_id) {
+            // If the visitor_id is missing in the query parameters, return a 400 Bad Request response
+            return res.status(400).json({ error: 'VisitorID is missing in the query parameters' });
+        }
+
+        // Call the nrOfMessagesUsed function with the retrieved visitor_id
+        const messagesSent = await nrOfMessagesUsed(visitor_id);
+
+        res.json({ messagesSent });
     } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({ error: 'Internal server error' });
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-  });
+});
+
+
+export async function saveChatMessage(visitor_id, visitor_message, ai_message) {
+    // Query the database to find the maximum existing message_number for this visitor and increment it by 1.
+    const [maxResult] = await dbConnection.query(
+        'SELECT MAX(message_number) AS max_message_number FROM chat_message WHERE visitor_id = ?',
+        [visitor_id]
+    );
+    const message_number = maxResult[0].max_message_number + 1;
+
+    const [result] = await dbConnection.query(
+        'INSERT INTO chat_message (visitor_id, visitor_message, ai_message, message_number) VALUES (?, ?, ?, ?)',
+        [visitor_id, visitor_message, ai_message, message_number]
+    );
+}
+
   
+
 
 chatUsageRouter.post('/increment-messages', async (req, res, next) => {
     try {

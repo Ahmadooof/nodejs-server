@@ -10,6 +10,8 @@ RUN npm install --production
 
 COPY . .
 
+ENV REACT_APP_OPENAI_API_KEY=default-value
+
 COPY entrypoint.sh /app
 
 RUN chmod +x /app/entrypoint.sh

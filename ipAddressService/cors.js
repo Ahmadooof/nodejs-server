@@ -1,6 +1,7 @@
 import cors from 'cors';
 
-const allowedOrigin = '*'; // Allow requests from a single domain 
+// const allowedOrigin = 'https://ahmadhome.com'; // Allow requests from a single domain 
+const allowedOrigin = 'https://ahmadhome.com'; // Allow requests from a single domain 
 
 const corsOptions = {
   origin: allowedOrigin,
