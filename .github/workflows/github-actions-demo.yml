@@ -28,7 +28,7 @@ jobs:
         run: |
           docker buildx create --use
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker buildx build -t ahmadooof/mywebsite-nodejs:$DOCKER_TAG ./client --push
+          docker buildx build -t ahmadooof/mywebsite-nodejs:$DOCKER_TAG ./ipAddressService --push
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
