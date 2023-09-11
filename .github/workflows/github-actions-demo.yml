@@ -8,7 +8,6 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -43,5 +42,5 @@ jobs:
           DOCKER_TAG: ${{ steps.tag.outputs.DOCKER_TAG }}
         run: |
           kubectl set image deployment/nodejs-deployment nodejs-pod=ahmadooof/mywebsite-nodejs:$DOCKER_TAG
-          
+
 
