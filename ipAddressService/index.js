@@ -1,11 +1,19 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from './cors.js';
 import morgan from 'morgan';
-// import getClientIP from './middlewear/getClientIP.js';
+import getClientIP from './middlewear/getClientIP.js';
 import usageRoute from './routes/usage.js';
 import userRoute from './routes/user.js';
 import messagesRoute from './routes/messages.js';
+import cors from 'cors';
+
+const allowedOrigin = 'https://ahmadhome.com'; // http://localhost:3000 reactjs
+
+const corsOptions = {
+  origin: allowedOrigin,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+};
 
 var app = express();
 
@@ -14,13 +22,13 @@ app.use(bodyParser.json());
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms')); // for logging development purposes
 
-app.use(cors);
+app.use(cors(corsOptions));
 
 
 app.use('/', userRoute)
 app.use('/', usageRoute)
 app.use('/', messagesRoute);
-// app.use(getClientIP)
+app.use(getClientIP)
 
 app.listen(4000, () => {
 
