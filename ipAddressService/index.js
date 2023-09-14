@@ -28,6 +28,9 @@ app.use((req, res, next) => {
 
 app.use(cors(corsOptions));
 
+app.get('/', function (req, res) {
+  res.send('hello world');
+})
 
 app.use('/', userRoute)
 app.use('/', usageRoute)
