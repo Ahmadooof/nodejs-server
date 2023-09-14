@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from './middlewear/cors.js';
+import cors from './cors.js';
 import morgan from 'morgan';
 import getClientIP from './middlewear/getClientIP.js';
 import usageRoute from './routes/usage.js';
