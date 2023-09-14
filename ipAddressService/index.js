@@ -9,6 +9,8 @@ import messagesRoute from './routes/messages.js';
 
 var app = express();
 
+app.use(cors);
+
 app.use(bodyParser.json());
 
 app.listen(4000, () => {
@@ -19,7 +21,6 @@ app.use(getClientIP)
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms')); // for logging development purposes
 
-app.use(cors);
 
 app.use('/', userRoute)
 app.use('/', usageRoute)
