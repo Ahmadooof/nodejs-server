@@ -5,7 +5,7 @@ import { triggerInit } from './triggerInit.js';
 async function start() {
     let schema = process.env.DATABASE
     await dbInit()
-    await triggerInit(schema)
+    // await triggerInit(schema)
 }
 
 start();
