@@ -22,9 +22,9 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
     console.log('Request Headers:', req.headers);
     next();
-  });
+});
   
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms')); // for logging development purposes
+// app.use(morgan(':method :url :status :res[content-length] - :response-time ms')); // for logging development purposes
 
 app.use(cors(corsOptions));
 
