@@ -1,6 +1,6 @@
 import cors from 'cors';
 
-const allowedOrigins = ['https://ahmadhome.com'];
+const allowedOrigins = ['https://ahmadhome.com']; // http://localhost:3000   https://ahmadhome.com
 
 const corsOptions = {
   origin: function (origin, callback) {
