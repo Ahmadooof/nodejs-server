@@ -1,11 +1,16 @@
 import cors from 'cors';
 
-// const allowedOrigin = 'https://ahmadhome.com'; // Allow requests from a single domain 
-// const allowedOrigin = 'https://ahmadhome.com'; // Allow requests from a single domain 
-const allowedOrigin = 'https://ahmadhome.com'; // Allow requests from a single domain 
+const allowedOrigins = ['https://ahmadhome.com'];
 
 const corsOptions = {
-  origin: allowedOrigin,
+  origin: function (origin, callback) {
+    // Check if the request origin is in the allowedOrigins array
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
 };

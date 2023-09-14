@@ -14,6 +14,8 @@ export async function dbInit() {
     `;
 
     const createuserTable = `
+      DROP TABLE IF EXISTS users;
+      
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
         ip_address VARCHAR(45) NOT NULL,
@@ -26,6 +28,8 @@ export async function dbInit() {
     `;
 
     const createChatUsageTable = `
+    DROP TABLE IF EXISTS usages;
+
       CREATE TABLE IF NOT EXISTS usages (
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT UNIQUE NOT NULL,
@@ -37,6 +41,8 @@ export async function dbInit() {
     `;
 
     const createChatMessageTable = `
+    DROP TABLE IF EXISTS messages;
+
       CREATE TABLE IF NOT EXISTS messages (
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT NOT NULL,
