@@ -42,5 +42,5 @@ jobs:
           DOCKER_TAG: ${{ steps.tag.outputs.DOCKER_TAG }}
         run: |
           kubectl set image deployment/nodejs-deployment nodejs-pod=ahmadooof/mywebsite-nodejs:$DOCKER_TAG
-
+          kubectl rollout restart deployment/nodejs-deployment
 
