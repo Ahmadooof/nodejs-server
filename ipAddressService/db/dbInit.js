@@ -3,7 +3,7 @@ import dbConnection from './dbConnection.js';
 export async function dbInit() {
   try {
     // Connect to the MySQL server (connection is automatically managed by the pool)
-    console.log('Connecting to MySQL server...');
+    console.log('Connecting to MySQL server1...');
 
     // SQL statements for table initialization
     const forAllTables = `

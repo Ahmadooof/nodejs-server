@@ -8,4 +8,4 @@ async function start() {
     // await triggerInit(schema)
 }
 
-start();
+// start();
