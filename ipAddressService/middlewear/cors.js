@@ -1,6 +1,8 @@
 import cors from 'cors';
 
-const allowedOrigin = 'https://ahmadhome.com'; // http://localhost:3000 reactjs
+// still in postman we can make request.
+
+const allowedOrigin = 'https://ahmadhome.com'; // http://localhost:3000 reactjs https://ahmadhome.com
 
 const corsOptions = {
   origin: allowedOrigin,

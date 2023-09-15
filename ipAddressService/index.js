@@ -5,21 +5,13 @@ import getClientIP from './middlewear/getClientIP.js';
 import usageRoute from './routes/usage.js';
 import userRoute from './routes/user.js';
 import messagesRoute from './routes/messages.js';
-import cors from 'cors';
-
-const allowedOrigin = 'https://ahmadhome.com'; // http://localhost:3000 reactjs
-
-const corsOptions = {
-  origin: allowedOrigin,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
-};
+import cors from './middlewear/cors.js';
 
 var app = express();
 
 app.use(bodyParser.json());
 
-app.use(cors(corsOptions));
+app.use(cors);
 
 app.use((req, res, next) => {
     console.log('Request Headers:', req.headers);
@@ -33,10 +25,11 @@ app.get('/', function (req, res) {
   res.send('hello world');
 })
 
+app.use(getClientIP) // order matter, this should be before routes, to get client ip from headers.
+
 app.use('/', userRoute)
 app.use('/', usageRoute)
 app.use('/', messagesRoute);
-app.use(getClientIP)
 
 app.listen(4000, () => {
 

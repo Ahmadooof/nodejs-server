@@ -6,7 +6,7 @@ const userRoute = express.Router();
 
 userRoute.post('/insert-user', async (req, res, next) => {
     const ip_address = req.clientIP;    
-
+    
     let connection;
     try {
         connection = await startTransaction();
@@ -34,6 +34,8 @@ userRoute.post('/insert-user', async (req, res, next) => {
 userRoute.post('/is-user-exists', async (req, res, next) => {
     try {
         const ip_address = req.clientIP;
+
+
         let connection = await startTransaction();
 
         const userExists = await isRecordExistsByCondition(connection, 'users', 'ip_address', ip_address);
