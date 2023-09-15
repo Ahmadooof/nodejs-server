@@ -1,11 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors';
 import morgan from 'morgan';
-import getClientIP from './middlewear/getClientIP.js';
+// import getClientIP from './middlewear/getClientIP.js';
 import usageRoute from './routes/usage.js';
 import userRoute from './routes/user.js';
 import messagesRoute from './routes/messages.js';
+import cors from 'cors';
 
 const allowedOrigin = 'https://ahmadhome.com'; // http://localhost:3000 reactjs
 
@@ -35,7 +35,7 @@ app.get('/', function (req, res) {
 app.use('/', userRoute)
 app.use('/', usageRoute)
 app.use('/', messagesRoute);
-app.use(getClientIP)
+// app.use(getClientIP)
 
 app.listen(4000, () => {
 
