@@ -19,17 +19,17 @@ var app = express();
 
 app.use(bodyParser.json());
 
-// app.use((req, res, next) => {
-//     console.log('Request Headers:', req.headers);
-//     next();
-// });
+app.use((req, res, next) => {
+    console.log('Request Headers:', req.headers);
+    next();
+});
   
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms')); // for logging development purposes
 
 app.use(cors(corsOptions));
 
 app.get('/', function (req, res) {
-  res.send('hello');
+  res.send('hello world');
 })
 
 app.use('/', userRoute)
