@@ -4,48 +4,29 @@ import { commitTransaction, rollbackTransaction, startTransaction } from '../db/
 
 const userRoute = express.Router();
 
-userRoute.post('/insert-user', async (req, res, next) => {
-    const ip_address = req.clientIP;    
-    
+userRoute.post('/user/withDefaultMessages', async (req, res, next) => {
+    const ip_address = req.clientIP;
+    const availableMessages = 10
+
     let connection;
     try {
         connection = await startTransaction();
 
-        const userExists = await isRecordExistsByCondition(connection, 'users', 'ip_address', ip_address);
+        const userExists = await isRecordExistsByCondition(connection, 'users', 'ip_address', ip_address)
 
         if (userExists) {
-            res.status(200).json({ message: 'User already exists.' });
+            const user = await getRecordById(connection, 'users', 'ip_address', ip_address);
+            const usage = await getRecordById(connection, 'usages', 'user_id', user.id);
+            res.status(200).json({ availableMessages: usage.nr_of_available_messages, message: 'User already exists.' });
+            return;
         } else {
             await insertRecord(connection, 'users', { ip_address });
-
+            const user = await getRecordById(connection, 'users', 'ip_address', ip_address);
+            await insertRecord(connection, 'usages', { user_id: user.id, nr_of_available_messages: availableMessages });
             await commitTransaction(connection);
-            res.status(201).json({ message: 'Uesr, inserted successfully.' });
+            res.status(201).json({ availableMessages: availableMessages, message: 'User with default messages created.' });
         }
     }
-     catch (error) {
-        // Rollback the transaction in case of an error
-        if (connection) {
-            await rollbackTransaction(connection);
-        }
-        next(error);
-    }
-});
-
-userRoute.post('/is-user-exists', async (req, res, next) => {
-    try {
-        const ip_address = req.clientIP;
-
-
-        let connection = await startTransaction();
-
-        const userExists = await isRecordExistsByCondition(connection, 'users', 'ip_address', ip_address);
-
-        if (userExists) {
-            res.status(200).json({ message: 'User already exists.' });
-        } else {
-            res.status(404).json({ message: 'User not found.' });
-        }
-    } 
     catch (error) {
         if (connection) {
             await rollbackTransaction(connection);

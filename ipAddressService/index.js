@@ -2,10 +2,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import getClientIP from './middlewear/getClientIP.js';
-import usageRoute from './routes/usage.js';
+// import usageRoute from './routes/usage.js';
 import userRoute from './routes/user.js';
 import messagesRoute from './routes/messages.js';
 import cors from './middlewear/cors.js';
+import rateLimitMiddleware from './middlewear/rateLimit.js';
 
 var app = express();
 
@@ -27,8 +28,10 @@ app.get('/', function (req, res) {
 
 app.use(getClientIP) // order matter, this should be before routes, to get client ip from headers.
 
+app.use(rateLimitMiddleware);
+
 app.use('/', userRoute)
-app.use('/', usageRoute)
+// app.use('/', usageRoute)
 app.use('/', messagesRoute);
 
 app.listen(4000, () => {
