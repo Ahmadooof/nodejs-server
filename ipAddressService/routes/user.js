@@ -18,14 +18,13 @@ userRoute.post('/user/withDefaultMessages', async (req, res, next) => {
             const user = await getRecordById(connection, 'users', 'ip_address', ip_address);
             const usage = await getRecordById(connection, 'usages', 'user_id', user.id);
             res.status(200).json({ availableMessages: usage.nr_of_available_messages, message: 'User already exists.' });
-            return;
         } else {
             await insertRecord(connection, 'users', { ip_address });
             const user = await getRecordById(connection, 'users', 'ip_address', ip_address);
             await insertRecord(connection, 'usages', { user_id: user.id, nr_of_available_messages: availableMessages });
-            await commitTransaction(connection);
             res.status(201).json({ availableMessages: availableMessages, message: 'User with default messages created.' });
         }
+        commitTransaction(connection)
     }
     catch (error) {
         if (connection) {

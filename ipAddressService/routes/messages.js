@@ -39,13 +39,14 @@ messagesRoute.post('/send-message', async (req, res, next) => {
       await decrementColumnByCondition(connection, 'usages', 'nr_of_available_messages', 1, 'user_id', user.id);
       const newUsage = await getRecordById(connection, 'usages', 'user_id', user.id);
       console.log(newUsage)
-      await commitTransaction(connection);
+      res.status(200).json({ response: responseText, availableMessages: newUsage.nr_of_available_messages });
 
-      return res.status(200).json({ response: responseText, availableMessages: newUsage.nr_of_available_messages });
     }
-    else {
+    else
       return res.status(429).json({ message: 'No available messages for the user.' });
-    }
+
+
+    await commitTransaction(connection);
   } catch (error) {
     if (connection) {
       await rollbackTransaction(connection);

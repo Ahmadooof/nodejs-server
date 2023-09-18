@@ -2,7 +2,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import getClientIP from './middlewear/getClientIP.js';
-// import usageRoute from './routes/usage.js';
 import userRoute from './routes/user.js';
 import messagesRoute from './routes/messages.js';
 import cors from './middlewear/cors.js';
@@ -21,7 +20,6 @@ app.use((req, res, next) => {
   
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms')); // for logging development purposes
 
-
 app.get('/', function (req, res) {
   res.send('hello world');
 })
@@ -31,7 +29,6 @@ app.use(getClientIP) // order matter, this should be before routes, to get clien
 app.use(rateLimitMiddleware);
 
 app.use('/', userRoute)
-// app.use('/', usageRoute)
 app.use('/', messagesRoute);
 
 app.listen(4000, () => {
